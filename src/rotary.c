@@ -6,8 +6,8 @@
 // deliver an extra pulse whenever the detector crosses it. The "zero" edge can
 // be used to recalibrate the counter on the fly.
 
-// Number of poles on the ring:
-#define RINGSIZE	2000
+// Number of steps on the ring:
+#define RINGSIZE	48000UL
 
 void
 rotary_get_state (uint16_t *count, uint16_t *zero, uint16_t *raw)
@@ -26,12 +26,12 @@ rotary_get_state (uint16_t *count, uint16_t *zero, uint16_t *raw)
 	// unsigned realm. Examples:
 	//
 	//   If raw = 54 and zero = 2, we have:
-	//       (54 + (2000 - 2)) % 2000 = 52
+	//       (54 + (48000 - 2)) % 48000 = 52
 	//
-	//   If raw = 54 and zero = 1982, we have:
-	//       (54 + (2000 - 1982)) % 2000 = 72
+	//   If raw = 54 and zero = 47442, we have:
+	//       (54 + (48000 - 47442)) % 48000 = 612
 	//
-	*count = (*raw + (RINGSIZE - *zero)) % RINGSIZE;
+	*count = ((uint32_t) *raw + (RINGSIZE - (uint32_t) *zero)) % RINGSIZE;
 }
 
 void

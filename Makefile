@@ -41,9 +41,9 @@ libopencm3:
 
 flash: $(PROJECT).bin
 	openocd \
-	  -f /usr/share/openocd/scripts/interface/stlink-v2.cfg \
+	  -f interface/stlink-v2.cfg \
 	  -c "transport select hla_swd" \
-	  -f /usr/share/openocd/scripts/target/stm32f1x.cfg \
+	  -f target/stm32f1x.cfg \
 	  -c "init" \
 	  -c "reset halt" \
 	  -c "stm32f1x unlock 0" \
@@ -53,9 +53,9 @@ flash: $(PROJECT).bin
 
 debug: $(PROJECT).elf
 	xterm -e 'openocd \
-	  -f /usr/share/openocd/scripts/interface/stlink-v2.cfg \
+	  -f interface/stlink-v2.cfg \
 	  -c "transport select hla_swd" \
-	  -f /usr/share/openocd/scripts/target/stm32f1x.cfg \
+	  -f target/stm32f1x.cfg \
 	  -c "init" \
 	  -c "halt"' &
 	$(GDB) --eval-command="target remote localhost:3333" $(PROJECT).elf

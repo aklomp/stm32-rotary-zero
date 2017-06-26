@@ -2,8 +2,8 @@
 
 This is simple firmware for an STM32F103C8T6 to measure, calibrate and print
 the value of a ring-shaped rotary encoder with a zero calibration pulse. Our
-rotary encoder is a ring with 2000 poles around its circumference, and one
-special pole that emits a "zero" correction pulse. We correct the "raw" counter
+rotary encoder is a ring with 48000 steps around its circumference, and one
+special step that emits a "zero" correction pulse. We correct the "raw" counter
 value using this pulse. The zero, raw and calibrated values are printed to
 USART1 (pin A9) at 25 Hz.
 
