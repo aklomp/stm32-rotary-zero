@@ -1,0 +1,20 @@
+name: Build
+
+on: [push]
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Install dependencies
+      run: |
+        curl -Lo gcc-arm-none-eabi.tar.xz https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-x86_64-arm-none-eabi.tar.xz
+        sudo mkdir /opt/gcc-arm-none-eabi
+        sudo tar xf gcc-arm-none-eabi.tar.xz --strip-components=1 -C /opt/gcc-arm-none-eabi
+        echo "/opt/gcc-arm-none-eabi/bin" >> $GITHUB_PATH
+    - name: Compile
+      run: make

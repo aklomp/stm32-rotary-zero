@@ -1,5 +1,7 @@
 # STM32F1 rotary encoder with zero pulse
 
+[![Build](https://github.com/aklomp/stm32-rotary-zero/actions/workflows/build.yml/badge.svg)](https://github.com/aklomp/stm32-rotary-zero/actions/workflows/build.yml)
+
 This is simple firmware for an STM32F103C8T6 to measure, calibrate and print
 the value of a ring-shaped rotary encoder with a zero calibration pulse. Our
 rotary encoder is a ring with 48000 steps around its circumference, and one
