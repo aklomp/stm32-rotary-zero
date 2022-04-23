@@ -12,7 +12,7 @@ clock_setup (void)
 	};
 
 	// Run at 72 MHz from an external oscillator:
-	rcc_clock_setup_in_hse_8mhz_out_72mhz();
+	rcc_clock_setup_pll(&rcc_hse_configs[RCC_CLOCK_HSE8_72MHZ]);
 
 	// Enable peripheral clocks:
 	for (uint32_t i = 0; i < sizeof(map) / sizeof(map[0]); i++)
