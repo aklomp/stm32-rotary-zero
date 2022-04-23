@@ -28,7 +28,7 @@ loop (void)
 	systick_clear();
 
 	for (;;) {
-		char buf[16];
+		char buf[32];
 		uint16_t count, zero, raw;
 
 		// Busy-loop until systick underruns:
