@@ -6,15 +6,49 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
+
+      # Checkout the code.
     - name: Checkout
       uses: actions/checkout@v3
       with:
         submodules: recursive
+
+      # Install the dependencies: ARM's GCC toolchain.
     - name: Install dependencies
       run: |
         curl -Lo gcc-arm-none-eabi.tar.xz https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-x86_64-arm-none-eabi.tar.xz
         sudo mkdir /opt/gcc-arm-none-eabi
         sudo tar xf gcc-arm-none-eabi.tar.xz --strip-components=1 -C /opt/gcc-arm-none-eabi
         echo "/opt/gcc-arm-none-eabi/bin" >> $GITHUB_PATH
+
+      # Compile the code.
     - name: Compile
       run: make
+
+      # Create the release ID from the repo name and version tag.
+    - name: Release - get ID
+      id: id
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        project=$(echo "${{github.repository}}" | cut -d/ -f2)
+        version=$(echo "${{github.ref_name}}" | sed 's/^v//')
+        echo "::set-output name=id::${project}-${version}"
+
+      # Package the release artifacts.
+    - name: Release - package artifacts
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        mkdir ${{steps.id.outputs.id}}
+        mv rotary.bin ${{steps.id.outputs.id}}/${{steps.id.outputs.id}}.bin
+        mv rotary.elf ${{steps.id.outputs.id}}/${{steps.id.outputs.id}}.elf
+        mv rotary.map ${{steps.id.outputs.id}}/${{steps.id.outputs.id}}.map
+        tar cvzf ${{steps.id.outputs.id}}.tar.gz ${{steps.id.outputs.id}}
+
+      # Create a release.
+    - name: Release - create
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/v')
+      with:
+        name: ${{steps.id.outputs.id}}
+        files: |
+          ${{steps.id.outputs.id}}.tar.gz
